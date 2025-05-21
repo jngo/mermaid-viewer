@@ -18,16 +18,16 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
   }
 
   return (
-    <Card className="absolute inset-x-0 top-0 max-w-lg mx-auto z-20 overflow-hidden rounded-md flex flex-col shadow-lg pointer-events-auto transition-all duration-200 ease-in-out" style={{ height: isExpanded ? '100%' : '10dvh' }}>
-      <div className="flex items-center justify-between p-2 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="text-sm font-medium">Mermaid Editor</div>
+    <Card className={`absolute inset-x-0 top-0 max-w-lg mx-auto z-20 p-3 overflow-hidden flex flex-col shadow-md pointer-events-auto transition-all duration-200 ease-in-out ${isExpanded ? 'h-full' : 'h-[3.125rem]'}`}>
+      <div className="mb-3 flex items-center justify-between">
+        <h1 className="text-sm font-medium">Mermaid Editor</h1>
         <Button
           variant="ghost"
-          size="sm"
-          className="rounded-full p-0 hover:bg-background/80"
+          size="icon"
+          className="-m-2"
           onClick={toggleExpand}
         >
-          {isExpanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+          {isExpanded ? <ChevronUp /> : <ChevronDown />}
         </Button>
       </div>
       <Textarea
@@ -36,7 +36,7 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
         onFocus={() => setIsExpanded(true)}
         onBlur={() => setIsExpanded(false)}
         placeholder="Enter Mermaid diagram code here..."
-        className="flex-1 resize-none p-2 font-mono text-base text-nowrap border-none rounded-none"
+        className="flex-1 resize-none p-2 font-mono text-base text-nowrap "
       />
       {error && (
         <div className="p-2 text-xs text-red-500 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

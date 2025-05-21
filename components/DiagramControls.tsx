@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Download, ZoomIn, ZoomOut, Crosshair } from "lucide-react"
 import { RefObject } from "react"
-
+import { Card } from "@/components/ui/card"
 interface DiagramControlsProps {
   transformRef: RefObject<any>
   onExport: () => void
@@ -9,35 +9,35 @@ interface DiagramControlsProps {
 
 export function DiagramControls({ transformRef, onExport }: DiagramControlsProps) {
   return (
-    <div className="absolute inset-x-0 bottom-0 mx-auto z-10 flex items-center justify-center space-x-2 pointer-events-auto">
+    <Card className="absolute inset-x-0 bottom-0 mx-auto w-fit p-1 z-10 shadow-md flex items-center justify-center space-x-2 pointer-events-auto">
       <Button 
-        variant="outline" 
-        size="icon" 
+        variant="ghost"
+        size="icon"
         onClick={() => transformRef.current?.zoomOut()}
       >
-        <ZoomOut className="h-4 w-4" />
+        <ZoomOut />
       </Button>
       <Button 
-        variant="outline" 
-        size="icon" 
+        variant="ghost" 
+        size="icon"
         onClick={() => transformRef.current?.zoomIn()}
       >
-        <ZoomIn className="h-4 w-4" />
+        <ZoomIn />
       </Button>
       <Button 
-        variant="outline" 
-        size="icon" 
+        variant="ghost" 
+        size="icon"
         onClick={() => transformRef.current?.resetTransform()}
       >
-        <Crosshair className="h-4 w-4" />
+        <Crosshair />
       </Button>
       <Button 
-        variant="outline" 
-        size="icon" 
+        variant="ghost" 
+        size="icon"
         onClick={onExport}
       >
-        <Download className="h-4 w-4" />
+        <Download />
       </Button>
-    </div>
+    </Card>
   )
 } 
