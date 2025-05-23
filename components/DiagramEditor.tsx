@@ -18,7 +18,7 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
   }
 
   return (
-    <Card className={`absolute inset-x-0 top-0 max-w-lg mx-auto z-20 p-3 overflow-hidden flex flex-col shadow-md pointer-events-auto transition-all duration-200 ease-in-out ${isExpanded ? 'h-full' : 'h-[3.125rem]'}`}>
+    <Card className={`absolute inset-x-0 top-0 max-w-lg mx-auto max-h-full z-20 p-3 overflow-hidden flex flex-col shadow-md pointer-events-auto transition-all duration-200 ease-in-out ${isExpanded ? 'h-96' : 'h-[3.125rem]'}`}>
       <div className="mb-3 flex items-center justify-between">
         <h1 className="text-sm font-medium">Mermaid Editor</h1>
         <Button
@@ -36,7 +36,7 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
         onFocus={() => setIsExpanded(true)}
         onBlur={() => setIsExpanded(false)}
         placeholder="Enter Mermaid diagram code here..."
-        className="flex-1 resize-none p-2 font-mono text-base text-nowrap "
+        className="h-full min-h-10 2 font-mono text-base text-nowrap" 
       />
       {error && (
         <div className="p-2 text-xs text-red-500 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
