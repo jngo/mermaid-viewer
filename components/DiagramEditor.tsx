@@ -48,8 +48,9 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
       </TabsContent>
 
       <TabsContent value="about" className="w-full grow text-muted-foreground text-sm space-y-2">
-        <p>I created Mermaid View because I generate a lot of Mermaid diagrams with ChatGPT and needed a way to quickly preview them on both desktop and mobile.</p>
-        <p>Mermaid is a simple and user-friendly tool that allows you to create visual diagrams and flowcharts using plain text.</p>
+        <p>This was born out of the need for a simple, mobile-friendly viewer for the mountains of Mermaid diagrams coming out of my ChatGPT sessions.</p>
+        <p>As a tool for creating diagrams and visualisations using plain text, <a href="https://mermaid.js.org/" className="underline">Mermaid</a> is ideally suited for transforming the outputs of generative AI into structured formats.</p>
+        <p>Created by <a href="https://smallepic.com/" className="underline">John Ngo</a> with <em>a lot</em> of help from <a href="https://v0.dev/" className="underline">v0</a> and <a href="https://cursor.com/" className="underline">Cursor</a>.</p>
       </TabsContent>
     </Tabs>
   )
