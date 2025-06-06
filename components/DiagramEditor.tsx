@@ -27,7 +27,7 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
       onMouseLeave={() => isAutoExpandEnabled && setIsExpanded(false)}
     >
       <div className="flex items-center justify-between w-full">
-        <TabsList className="w-min h-7 px-0.75 py-1 -mt-3 mb-2 rounded-md">
+        <TabsList className="w-min h-7 px-0.5 py-1 -ml-2 -mt-3 mb-2 rounded-md">
           <TabsTrigger value="editor" className="h-[1.45rem] px-2 py-1 rounded-sm text-xs">Editor</TabsTrigger>
           <TabsTrigger value="about" className="h-[1.45rem] px-2 py-1 rounded-sm text-xs">About</TabsTrigger>
         </TabsList>
