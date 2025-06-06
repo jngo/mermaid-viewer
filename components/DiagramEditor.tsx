@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { useState } from "react"
-import { ChevronUp, ChevronDown } from "lucide-react"
+import { Pin, PinOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
@@ -13,13 +13,19 @@ interface DiagramEditorProps {
 
 export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEditorProps) {
   const [isExpanded, setIsExpanded] = useState(false)
+  const [isAutoExpandEnabled, setIsAutoExpandEnabled] = useState(true)
 
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded)
+  const toggleAutoExpand = () => {
+    setIsAutoExpandEnabled(!isAutoExpandEnabled)
   }
 
   return (
-    <Tabs defaultValue="editor" className={`absolute inset-x-0 top-0 max-w-lg mx-auto max-h-full ${isExpanded ? 'h-auto' : 'h-[2.875rem]'} rounded-lg border bg-card shadow-md px-4 pt-5 pb-4 pointer-events-auto flex flex-col items-center overflow-hidden`} onValueChange={() => setIsExpanded(true)}>
+    <Tabs 
+      defaultValue="editor" 
+      className={`absolute inset-x-0 top-0 max-w-lg mx-auto max-h-full ${isExpanded ? 'h-auto' : 'h-[2.875rem]'} rounded-lg border bg-card shadow-md px-4 pt-5 pb-4 pointer-events-auto flex flex-col items-center overflow-hidden`} 
+      onMouseEnter={() => isAutoExpandEnabled && setIsExpanded(true)} 
+      onMouseLeave={() => isAutoExpandEnabled && setIsExpanded(false)}
+    >
       <div className="flex items-center justify-between w-full">
         <TabsList className="w-min h-7 px-0.75 py-1 -mt-3 mb-2 rounded-md">
           <TabsTrigger value="editor" className="h-[1.45rem] px-2 py-1 rounded-sm text-xs">Editor</TabsTrigger>
@@ -29,9 +35,9 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
           variant="ghost"
           size="icon"
           className="-mr-2 -mt-5 size-7"
-          onClick={toggleExpand}
+          onClick={toggleAutoExpand}
         >
-          {isExpanded ? <ChevronUp /> : <ChevronDown />}
+          {isAutoExpandEnabled ? <Pin /> : <PinOff />}
         </Button>
       </div>
 
