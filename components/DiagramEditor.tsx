@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Pin, PinOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -14,10 +14,22 @@ interface DiagramEditorProps {
 export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEditorProps) {
   const [isExpanded, setIsExpanded] = useState(false)
   const [isAutoExpandEnabled, setIsAutoExpandEnabled] = useState(true)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const toggleAutoExpand = () => {
     setIsAutoExpandEnabled(!isAutoExpandEnabled)
   }
+
+  useEffect(() => {
+    const textarea = textareaRef.current
+    if (textarea) {
+      const handleFocus = () => {
+        textarea.select()
+      }
+      textarea.addEventListener('focus', handleFocus)
+      return () => textarea.removeEventListener('focus', handleFocus)
+    }
+  }, [])
 
   return (
     <Tabs 
@@ -27,7 +39,7 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
       onMouseLeave={() => isAutoExpandEnabled && setIsExpanded(false)}
     >
       <div className="flex items-center justify-between w-full">
-        <TabsList className="w-min h-7 px-0.5 py-1 -ml-2 -mt-3 mb-2 rounded-md">
+        <TabsList className="w-min h-7 px-0.75 py-1 -ml-2 -mt-3 mb-2 rounded-md">
           <TabsTrigger value="editor" className="h-[1.45rem] px-2 py-1 rounded-sm text-xs">Editor</TabsTrigger>
           <TabsTrigger value="about" className="h-[1.45rem] px-2 py-1 rounded-sm text-xs">About</TabsTrigger>
         </TabsList>
@@ -43,6 +55,7 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
 
       <TabsContent value="editor" className="w-full grow">
         <Textarea
+          ref={textareaRef}
           value={mermaidCode}
           onChange={(e) => onCodeChange(e.target.value)}
           className="h-full font-mono text-base text-nowrap h-[72dvh] max-h-[72dvh]"
