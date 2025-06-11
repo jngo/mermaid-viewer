@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import { Pin, PinOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { FLOWCHART, GANTT_CHART, USER_JOURNEY } from "@/lib/mermaid-examples"
 
 interface DiagramEditorProps {
   mermaidCode: string
@@ -41,6 +42,7 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
       <div className="flex items-center justify-between w-full">
         <TabsList className="w-min h-7 px-0.75 py-1 -ml-2 -mt-3 mb-2 rounded-md">
           <TabsTrigger value="editor" className="h-[1.45rem] px-2 py-1 rounded-sm text-xs">Editor</TabsTrigger>
+          <TabsTrigger value="examples" className="h-[1.45rem] px-2 py-1 rounded-sm text-xs">Examples</TabsTrigger>
           <TabsTrigger value="about" className="h-[1.45rem] px-2 py-1 rounded-sm text-xs">About</TabsTrigger>
         </TabsList>
         <Button
@@ -64,6 +66,22 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
         {error && (
           <p className="text-base text-red-500 mt-2">{error}</p>
         )}
+      </TabsContent>
+
+      <TabsContent value="examples" className="w-full grow space-y-2">
+          <p className="text-sm text-muted-foreground">Some example diagrams created with Mermaid.</p>
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-semibold">Flow Chart<br /><small className="text-sm font-normal text-muted-foreground">Frames of Mind by Howard Gardner</small></h2>
+            <Button variant="outline" size="sm" onClick={() => onCodeChange(FLOWCHART)}>View</Button>
+          </div>
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-semibold">Gantt Chart<br /><small className="text-sm font-normal text-muted-foreground">The Space Race (1957–1975)</small></h2>
+            <Button variant="outline" size="sm" onClick={() => onCodeChange(GANTT_CHART)}>View</Button>
+          </div>
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-semibold">User Journey<br /><small className="text-sm font-normal text-muted-foreground">Odysseus' Journey Home</small></h2>
+            <Button variant="outline" size="sm" onClick={() => onCodeChange(USER_JOURNEY)}>View</Button>
+          </div>
       </TabsContent>
 
       <TabsContent value="about" className="w-full grow text-muted-foreground text-sm space-y-2">

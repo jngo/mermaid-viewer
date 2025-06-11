@@ -1,22 +1,39 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useRef, useState, useMemo, useEffect } from "react"
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
 import { DiagramControls } from "./DiagramControls"
 import { DiagramEditor } from "./DiagramEditor"
 import { useDiagramRenderer } from "@/hooks/useDiagramRenderer"
 import { useDiagramExport } from "@/hooks/useDiagramExport"
-import { DEFAULT_DIAGRAM, initializeMermaid } from "@/lib/mermaid-config"
+import { FLOWCHART, GANTT_CHART, USER_JOURNEY } from "@/lib/mermaid-examples"
+import { initializeMermaid } from "@/lib/mermaid-config"
 
 // Initialize mermaid
 initializeMermaid()
 
 export default function MermaidCanvas() {
-  const [mermaidCode, setMermaidCode] = useState(DEFAULT_DIAGRAM)
+  const diagramExamples = [FLOWCHART, GANTT_CHART, USER_JOURNEY]
+  const randomDiagram = useMemo(() => {
+    return diagramExamples[Math.floor(Math.random() * diagramExamples.length)]
+  }, [])
+  const [mermaidCode, setMermaidCode] = useState(randomDiagram)
   const transformRef = useRef<any>(null)
   
   const { diagramRef, error } = useDiagramRenderer(mermaidCode)
   const { exportSVG } = useDiagramExport(diagramRef)
+
+  // Reset zoom when diagram code changes
+  useEffect(() => {
+    // Remove/hide the existing diagram
+    if (diagramRef.current) {
+      diagramRef.current.innerHTML = "";
+    }
+    // Reset zoom and pan state
+    if (transformRef.current?.resetTransform) {
+      transformRef.current.resetTransform();
+    }
+  }, [mermaidCode])
 
   return (
     <div className="fixed inset-0 w-screen h-dvh bg-gray-100 overflow-hidden">
