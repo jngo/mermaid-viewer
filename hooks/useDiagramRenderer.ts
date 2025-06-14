@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import mermaid from "mermaid"
+import { track } from "@vercel/analytics"
 
 export const useDiagramRenderer = (mermaidCode: string) => {
   const [error, setError] = useState<string | null>(null)
@@ -25,6 +26,7 @@ export const useDiagramRenderer = (mermaidCode: string) => {
       } catch (err) {
         console.error("Mermaid rendering error:", err)
         setError("Error rendering diagram. Please check your syntax.")
+        track('editor_error')
       }
     }
 

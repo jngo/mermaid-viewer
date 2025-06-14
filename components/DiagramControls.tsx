@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Download, ZoomIn, ZoomOut, Crosshair } from "lucide-react"
 import { RefObject } from "react"
 import { Card } from "@/components/ui/card"
+import { track } from "@vercel/analytics"
 
 interface DiagramControlsProps {
   transformRef: RefObject<any>
@@ -11,29 +12,38 @@ interface DiagramControlsProps {
 export function DiagramControls({ transformRef, onExport }: DiagramControlsProps) {
   return (
     <Card className="absolute inset-x-0 bottom-0 mx-auto w-fit p-1 z-10 shadow-md flex items-center justify-center space-x-1 pointer-events-auto">
-      <Button 
+      <Button
         variant="ghost"
         size="icon"
-        onClick={() => transformRef.current?.zoomOut()}
+        onClick={() => {
+          track('diagram_zoom', { direction: 'out' })
+          transformRef.current?.zoomOut()
+        }}
       >
         <ZoomOut />
       </Button>
-      <Button 
-        variant="ghost" 
+      <Button
+        variant="ghost"
         size="icon"
-        onClick={() => transformRef.current?.zoomIn()}
+        onClick={() => {
+          track('diagram_zoom', { direction: 'in' })
+          transformRef.current?.zoomIn()
+        }}
       >
         <ZoomIn />
       </Button>
-      <Button 
-        variant="ghost" 
+      <Button
+        variant="ghost"
         size="icon"
-        onClick={() => transformRef.current?.resetTransform()}
+        onClick={() => {
+          track('diagram_zoom_reset')
+          transformRef.current?.resetTransform()
+        }}
       >
         <Crosshair />
       </Button>
-      <Button 
-        variant="ghost" 
+      <Button
+        variant="ghost"
         size="icon"
         onClick={onExport}
       >

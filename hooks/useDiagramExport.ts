@@ -1,4 +1,5 @@
 import { RefObject } from "react"
+import { track } from "@vercel/analytics"
 
 export const useDiagramExport = (diagramRef: RefObject<HTMLDivElement | null>) => {
   const exportSVG = () => {
@@ -18,6 +19,7 @@ export const useDiagramExport = (diagramRef: RefObject<HTMLDivElement | null>) =
     link.click()
     document.body.removeChild(link)
     URL.revokeObjectURL(url)
+    track('diagram_export', { format: 'svg' })
   }
 
   return { exportSVG }
