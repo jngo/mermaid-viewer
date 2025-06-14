@@ -4,6 +4,7 @@ import { Pin, PinOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { FLOWCHART, GANTT_CHART, USER_JOURNEY } from "@/lib/mermaid-examples"
+import { track } from "@vercel/analytics"
 
 interface DiagramEditorProps {
   mermaidCode: string
@@ -17,7 +18,9 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const toggleAutoExpand = () => {
-    setIsAutoExpandEnabled(!isAutoExpandEnabled)
+    const newValue = !isAutoExpandEnabled
+    setIsAutoExpandEnabled(newValue)
+    track("toggle_auto_expand", { enabled: newValue })
   }
 
   useEffect(() => {
@@ -25,18 +28,28 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
     if (textarea) {
       const handleFocus = () => {
         textarea.select()
+        track("editor_focus")
       }
-      textarea.addEventListener('focus', handleFocus)
-      return () => textarea.removeEventListener('focus', handleFocus)
+      textarea.addEventListener("focus", handleFocus)
+      return () => textarea.removeEventListener("focus", handleFocus)
     }
   }, [])
 
+  // Track when the diagram code changes (debounced)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      track("code_changed")
+    }, 1000)
+    return () => clearTimeout(timer)
+  }, [mermaidCode])
+
   return (
-    <Tabs 
-      defaultValue="editor" 
-      className={`absolute inset-x-0 top-0 max-w-lg mx-auto max-h-full ${isExpanded ? 'h-auto' : 'h-[2.875rem]'} rounded-lg border bg-card shadow-md px-4 pt-5 pb-4 pointer-events-auto flex flex-col items-center overflow-hidden`} 
-      onMouseEnter={() => isAutoExpandEnabled && setIsExpanded(true)} 
+    <Tabs
+      defaultValue="editor"
+      className={`absolute inset-x-0 top-0 max-w-lg mx-auto max-h-full ${isExpanded ? 'h-auto' : 'h-[2.875rem]'} rounded-lg border bg-card shadow-md px-4 pt-5 pb-4 pointer-events-auto flex flex-col items-center overflow-hidden`}
+      onMouseEnter={() => isAutoExpandEnabled && setIsExpanded(true)}
       onMouseLeave={() => isAutoExpandEnabled && setIsExpanded(false)}
+      onValueChange={(value) => track("tab_change", { tab: value })}
     >
       <div className="flex items-center justify-between w-full">
         <TabsList className="w-min h-7 px-0.75 py-1 -ml-2 -mt-3 mb-2 rounded-md">
@@ -55,9 +68,45 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
 
       <TabsContent value="editor" className="w-full grow">
         <ul className="flex flex-nowrap overflow-x-auto gap-2 pb-2 -mx-4 px-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          <li><Button variant="outline" size="sm" className="rounded-full" onClick={() => onCodeChange(FLOWCHART)}>Frames of Mind by Howard Gardner</Button></li>
-          <li><Button variant="outline" size="sm" className="rounded-full" onClick={() => onCodeChange(GANTT_CHART)}>The Space Race (1957–1975)</Button></li>
-          <li><Button variant="outline" size="sm" className="rounded-full" onClick={() => onCodeChange(USER_JOURNEY)}>Odysseus' Journey Home</Button></li>
+          <li>
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-full"
+              onClick={() => {
+                track("example_selected", { name: "flowchart" })
+                onCodeChange(FLOWCHART)
+              }}
+            >
+              Frames of Mind by Howard Gardner
+            </Button>
+          </li>
+          <li>
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-full"
+              onClick={() => {
+                track("example_selected", { name: "gantt_chart" })
+                onCodeChange(GANTT_CHART)
+              }}
+            >
+              The Space Race (1957–1975)
+            </Button>
+          </li>
+          <li>
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-full"
+              onClick={() => {
+                track("example_selected", { name: "user_journey" })
+                onCodeChange(USER_JOURNEY)
+              }}
+            >
+              Odysseus' Journey Home
+            </Button>
+          </li>
         </ul>
 
         <Textarea
