@@ -20,7 +20,7 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
   const toggleAutoExpand = () => {
     const newValue = !isAutoExpandEnabled
     setIsAutoExpandEnabled(newValue)
-    track("toggle_auto_expand", { enabled: newValue })
+    track('panel_mode_set', { mode: newValue ? 'pinned' : 'unpinned' })
   }
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
     if (textarea) {
       const handleFocus = () => {
         textarea.select()
-        track("editor_focus")
+        track('editor_focus')
       }
       textarea.addEventListener("focus", handleFocus)
       return () => textarea.removeEventListener("focus", handleFocus)
@@ -38,7 +38,7 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
   // Track when the diagram code changes (debounced)
   useEffect(() => {
     const timer = setTimeout(() => {
-      track("code_changed")
+      track('editor_change', { subject: 'code' })
     }, 1000)
     return () => clearTimeout(timer)
   }, [mermaidCode])
@@ -49,7 +49,7 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
       className={`absolute inset-x-0 top-0 max-w-lg mx-auto max-h-full ${isExpanded ? 'h-auto' : 'h-[2.875rem]'} rounded-lg border bg-card shadow-md px-4 pt-5 pb-4 pointer-events-auto flex flex-col items-center overflow-hidden`}
       onMouseEnter={() => isAutoExpandEnabled && setIsExpanded(true)}
       onMouseLeave={() => isAutoExpandEnabled && setIsExpanded(false)}
-      onValueChange={(value) => track("tab_change", { tab: value })}
+      onValueChange={(value) => track('panel_tab_select', { name: value })}
     >
       <div className="flex items-center justify-between w-full">
         <TabsList className="w-min h-7 px-0.75 py-1 -ml-2 -mt-3 mb-2 rounded-md">
@@ -74,7 +74,7 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
               size="sm"
               className="rounded-full"
               onClick={() => {
-                track("example_selected", { name: "flowchart" })
+                track('example_view', { type: 'flowchart' })
                 onCodeChange(FLOWCHART)
               }}
             >
@@ -87,7 +87,7 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
               size="sm"
               className="rounded-full"
               onClick={() => {
-                track("example_selected", { name: "gantt_chart" })
+                track('example_view', { type: 'gantt_chart' })
                 onCodeChange(GANTT_CHART)
               }}
             >
@@ -100,7 +100,7 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
               size="sm"
               className="rounded-full"
               onClick={() => {
-                track("example_selected", { name: "user_journey" })
+                track('example_view', { type: 'user_journey' })
                 onCodeChange(USER_JOURNEY)
               }}
             >

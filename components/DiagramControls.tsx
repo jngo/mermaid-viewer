@@ -16,7 +16,7 @@ export function DiagramControls({ transformRef, onExport }: DiagramControlsProps
         variant="ghost"
         size="icon"
         onClick={() => {
-          track("zoom_out")
+          track('diagram_zoom', { direction: 'out' })
           transformRef.current?.zoomOut()
         }}
       >
@@ -26,7 +26,7 @@ export function DiagramControls({ transformRef, onExport }: DiagramControlsProps
         variant="ghost"
         size="icon"
         onClick={() => {
-          track("zoom_in")
+          track('diagram_zoom', { direction: 'in' })
           transformRef.current?.zoomIn()
         }}
       >
@@ -36,7 +36,7 @@ export function DiagramControls({ transformRef, onExport }: DiagramControlsProps
         variant="ghost"
         size="icon"
         onClick={() => {
-          track("reset_zoom")
+          track('diagram_zoom_reset')
           transformRef.current?.resetTransform()
         }}
       >

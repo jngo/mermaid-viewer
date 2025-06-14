@@ -26,7 +26,7 @@ export const useDiagramRenderer = (mermaidCode: string) => {
       } catch (err) {
         console.error("Mermaid rendering error:", err)
         setError("Error rendering diagram. Please check your syntax.")
-        track("render_error")
+        track('editor_error')
       }
     }
 

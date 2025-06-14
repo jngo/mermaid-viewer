@@ -19,7 +19,7 @@ export const useDiagramExport = (diagramRef: RefObject<HTMLDivElement | null>) =
     link.click()
     document.body.removeChild(link)
     URL.revokeObjectURL(url)
-    track("export_svg")
+    track('diagram_export', { format: 'svg' })
   }
 
   return { exportSVG }
