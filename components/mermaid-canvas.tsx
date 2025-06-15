@@ -35,13 +35,6 @@ export default function MermaidCanvas() {
     }
   }, [mermaidCode])
 
-  // Clear diagram when there is an error
-  useEffect(() => {
-    if (error && diagramRef.current) {
-      diagramRef.current.innerHTML = "";
-    }
-  }, [error])
-
   return (
     <div className="fixed inset-0 w-screen h-dvh bg-gray-100 overflow-hidden">
       {/* Diagram container with zoom and pan */}

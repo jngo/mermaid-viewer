@@ -7,6 +7,7 @@ export const initializeMermaid = () => {
     securityLevel: "loose",
     fontSize: 16,
     fontFamily: "Arial",
+    suppressErrorRendering: true,
     flowchart: {
       nodeSpacing: 50,
       rankSpacing: 50,
