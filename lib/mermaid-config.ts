@@ -16,5 +16,10 @@ export const initializeMermaid = () => {
       htmlLabels: true,
       padding: 15,
     },
+    journey: {
+      height: 70,
+      width: 250,
+      leftMargin: 300,
+    },
   })
 } 

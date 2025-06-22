@@ -64,23 +64,39 @@ export const GANTT_CHART = `gantt
     Apollo–Soyuz handshake                :milestone, 1975-07-17, 1d`;
 
 export const USER_JOURNEY = `journey
-    title Odysseus' Journey Home
-    section Departure & Early Trials
-      Leaves Troy & raids Cicones       : 5: Odysseus
-      Lotus-Eaters temptation           : 3: Crew
-    section Giants & Sorcery
-      Cyclops escape (Polyphemus)       : 2: Odysseus, Polyphemus
-      Aeolus' bag of winds              : 3: Crew
-      Laestrygonian ambush              : 2: Crew
-      Circe's island (year-long pause)  : 4: Odysseus
-    section Descent & Revelation
-      Underworld prophecy with Tiresias : 3: Odysseus
-    section Perilous Waters
-      Sirens—wax-in-ears test           : 4: Crew
-      Scylla & Charybdis passage        : 2: Crew
-    section Temptations & Captivity
-      Helios' cattle on Thrinacia       : 1: Crew
-      Calypso's isle (seven years)      : 5: Odysseus
-    section Homecoming
-      Phaeacian hospitality & voyage    : 4: Odysseus
-      Ithaca showdown & bow contest     : 5: Odysseus, Telemachus`;
+    title Two-Week Sprint
+
+    section Sprint Planning
+        Overpack sprint with stakeholder demands:                         3: Product Manager
+        Warn about technical debt and timeline:                           2: Tech Lead
+        Negotiate details and lose %40 of intended scope:                 2: Product Designer
+        Commit to sprint knowing it won't actually ship:                  3: Product Manager, Tech Lead, Product Designer
+
+    section Days 1–2 (Retro-Fitted Discovery)
+        Hold urgent clarification meetings:                               2: Product Manager
+        Spike an architectural change that will miss the sprint:          2: Tech Lead
+        Redesign user flow after late stakeholder feedback:               2: Product Designer
+
+    section Days 3–7 (Delivery Grind)
+
+        Fend off “is this done yet?” Slacks from multiple stakeholders:   2: Product Manager
+        Merge half-finished feature under ‘feature flag’, flag stays off: 2: Tech Lead
+        Daily stand-up devolves into status-report karaoke:               2: Product Manager, Tech Lead, Product Designer
+
+    section Days 8–13 (Scramble to the Finish)
+        Deliver ‘good enough’ designs, neglect edge and corner cases:     2: Product Designer
+        Scope increases by 30% because “it’s just one more field”:        1: Tech Lead, Product Designer
+        Hardcode config variables, leave TODO comment for next engineer:  2: Tech Lead
+        Triage bugs into next sprint labeled as ‘tech enhancement’:       3: Product Manager
+
+    section Day 14 (Sprint Review)
+        Present incomplete features:                                      4: Product Manager
+        Demo only happy path scenarios:                                   3: Tech Lead
+        Frame inconsistencies as opportunities:                           3: Product Designer
+        Stakeholders applaud demo, ask “can we launch next week?”:        2: Product Manager, Tech Lead, Product Designer
+
+    section Day 14 (Retrospective)
+        Everyone agrees “communication could be better” (again):          3: Product Manager, Tech Lead, Product Designer
+        Action items captured, archived when new sprint starts:           2: Product Manager
+        Team high-fives surviving another sprint, cycle repeats:          3: Product Manager, Tech Lead, Product Designer
+`;

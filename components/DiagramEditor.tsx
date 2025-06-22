@@ -111,7 +111,7 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
             </Button>
           </div>
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold">User Journey<br /><small className="text-sm font-normal text-muted-foreground">Odysseus' Journey Home</small></h2>
+            <h2 className="text-sm font-semibold">User Journey<br /><small className="text-sm font-normal text-muted-foreground">Two-Week Sprint</small></h2>
             <Button
               variant="outline"
               size="sm"
