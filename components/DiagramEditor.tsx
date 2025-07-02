@@ -46,7 +46,7 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
   return (
     <Tabs
       defaultValue="editor"
-      className={`absolute inset-x-0 top-0 max-w-lg mx-auto max-h-full ${isExpanded ? 'h-auto' : 'h-[2.875rem]'} rounded-lg border bg-card shadow-md px-4 pt-5 pb-4 pointer-events-auto flex flex-col items-center overflow-hidden`}
+      className={`absolute inset-x-0 top-0 max-w-lg max-h-full ${isExpanded ? 'h-auto' : 'h-[2.875rem]'} rounded-lg border bg-card shadow-md px-4 pt-5 pb-4 pointer-events-auto flex flex-col items-center overflow-hidden`}
       onMouseEnter={() => isAutoExpandEnabled && setIsExpanded(true)}
       onMouseLeave={() => isAutoExpandEnabled && setIsExpanded(false)}
       onValueChange={(value) => track('panel_tab_select', { name: value })}
