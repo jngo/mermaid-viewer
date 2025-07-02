@@ -11,7 +11,7 @@ interface DiagramControlsProps {
 
 export function DiagramControls({ transformRef, onExport }: DiagramControlsProps) {
   return (
-    <Card className="absolute inset-x-0 bottom-0 mx-auto w-fit p-1 z-10 shadow-md flex items-center justify-center space-x-1 pointer-events-auto">
+    <Card className="absolute right-0 bottom-0 w-fit p-1 z-10 shadow-md flex items-center justify-center space-x-1 pointer-events-auto">
       <Button
         variant="ghost"
         size="icon"
