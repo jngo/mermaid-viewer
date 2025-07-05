@@ -36,7 +36,7 @@ export default function MermaidCanvas() {
   }, [mermaidCode])
 
   return (
-    <div className="fixed inset-0 w-screen h-dvh bg-gray-100 overflow-hidden">
+    <div className="fixed inset-0 w-screen h-dvh overflow-hidden">
       {/* Diagram container with zoom and pan */}
       <TransformWrapper
         ref={transformRef}
