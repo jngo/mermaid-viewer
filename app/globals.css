@@ -93,9 +93,9 @@
 }
 
 :root {
-  --font-sans: 'source-code-pro', monospace;
-  --font-serif: 'source-serif-pro', serif;
-  --font-mono: 'source-code-pro', monospace;
+  --font-sans: 'inconsolata', monospace;
+  --font-serif: 'ff-meta-serif-web-pro', serif;
+  --font-mono: 'inconsolata', monospace;
 
   --background: oklch(0.9798 0.0045 78.2983);
   --foreground: oklch(0.1504 0.0095 86.0541);
