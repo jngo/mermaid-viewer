@@ -6,14 +6,10 @@ import { DiagramControls } from "./DiagramControls"
 import { DiagramEditor } from "./DiagramEditor"
 import { useDiagramRenderer } from "@/hooks/useDiagramRenderer"
 import { useDiagramExport } from "@/hooks/useDiagramExport"
-import { FLOWCHART, GANTT_CHART, USER_JOURNEY } from "@/lib/mermaid-examples"
-import { initializeMermaid } from "@/lib/mermaid-config"
-
-// Initialize mermaid
-initializeMermaid()
+import { FLOWCHART, SEQUENCE_DIAGRAM, STATE_DIAGRAM } from "@/lib/mermaid-examples"
 
 export default function MermaidCanvas() {
-  const diagramExamples = [FLOWCHART, GANTT_CHART, USER_JOURNEY]
+  const diagramExamples = [FLOWCHART, SEQUENCE_DIAGRAM, STATE_DIAGRAM]
   const randomDiagram = useMemo(() => {
     return diagramExamples[Math.floor(Math.random() * diagramExamples.length)]
   }, [])
@@ -52,7 +48,7 @@ export default function MermaidCanvas() {
         >
           <div
             ref={diagramRef}
-            className="w-screen h-screen flex items-center justify-center min-h-screen min-w-screen text-base [&_.mermaid_svg]:overflow-visible! [&_.mermaid_svg_text]:font-sans! [&_.mermaid_svg_text]:text-base! [&_.mermaid_svg_text]:fill-current! [&_.mermaid_svg_text]:!dominant-baseline-middle [&_.mermaid_svg_text]:!text-anchor-middle [&_.mermaid_svg_foreignObject]:overflow-visible! [&_.mermaid_svg_foreignObject_div]:text-base! [&_.mermaid_svg_foreignObject_div]:font-sans! [&_.mermaid_svg_foreignObject_div]:whitespace-normal! [&_.mermaid_svg_foreignObject_div]:break-words!"
+            className="w-screen h-screen flex items-center justify-center min-h-screen min-w-screen text-base [&_svg]:overflow-visible [&_svg]:max-w-none [&_svg]:h-auto [&_svg]:w-auto"
           />
         </TransformComponent>
       </TransformWrapper>

@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react"
 import { Pin, PinOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { FLOWCHART, GANTT_CHART, USER_JOURNEY } from "@/lib/mermaid-examples"
+import { FLOWCHART, SEQUENCE_DIAGRAM, STATE_DIAGRAM } from "@/lib/mermaid-examples"
 import { track } from "@vercel/analytics"
 
 interface DiagramEditorProps {
@@ -83,13 +83,13 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
       <TabsContent value="examples" className="w-full grow space-y-2">
           <p className="text-sm text-muted-foreground">Some example diagrams created with Mermaid.</p>
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold">Flow Chart<br /><small className="text-sm font-normal text-muted-foreground">Frames of Mind by Howard Gardner</small></h2>
+            <h2 className="text-sm font-semibold">Flow Chart<br /><small className="text-sm font-normal text-muted-foreground">From idea to launch</small></h2>
             <Button
               variant="outline"
               size="sm"
               className="rounded-full"
               onClick={() => {
-                track('example_view', { type: 'flowchart' })
+                track("example_view", { type: "flowchart" })
                 onCodeChange(FLOWCHART)
               }}
             >
@@ -97,28 +97,28 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
             </Button>
           </div>
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold">Gantt Chart<br /><small className="text-sm font-normal text-muted-foreground">The Space Race (1957–1975)</small></h2>
+            <h2 className="text-sm font-semibold">Sequence Diagram<br /><small className="text-sm font-normal text-muted-foreground">Form submission flow</small></h2>
             <Button
               variant="outline"
               size="sm"
               className="rounded-full"
               onClick={() => {
-                track('example_view', { type: 'gantt_chart' })
-                onCodeChange(GANTT_CHART)
+                track("example_view", { type: "sequence" })
+                onCodeChange(SEQUENCE_DIAGRAM)
               }}
             >
               View
             </Button>
           </div>
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold">User Journey<br /><small className="text-sm font-normal text-muted-foreground">Two-Week Sprint</small></h2>
+            <h2 className="text-sm font-semibold">State Diagram<br /><small className="text-sm font-normal text-muted-foreground">Editor lifecycle</small></h2>
             <Button
               variant="outline"
               size="sm"
               className="rounded-full"
               onClick={() => {
-                track('example_view', { type: 'user_journey' })
-                onCodeChange(USER_JOURNEY)
+                track("example_view", { type: "state" })
+                onCodeChange(STATE_DIAGRAM)
               }}
             >
               View

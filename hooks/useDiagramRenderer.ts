@@ -1,32 +1,48 @@
 import { useEffect, useRef, useState } from "react"
-import mermaid from "mermaid"
+import { renderMermaid, THEMES } from "beautiful-mermaid"
 import { track } from "@vercel/analytics"
+
+const diagramTheme = {
+  ...THEMES["zinc-light"],
+  font: "Inconsolata, monospace",
+  transparent: true,
+}
 
 export const useDiagramRenderer = (mermaidCode: string) => {
   const [error, setError] = useState<string | null>(null)
   const diagramRef = useRef<HTMLDivElement>(null)
+  const renderToken = useRef(0)
 
   useEffect(() => {
     const renderDiagram = async () => {
       if (!diagramRef.current) return
 
       try {
-        // Clear previous content
-        diagramRef.current.innerHTML = ""
+        const currentToken = ++renderToken.current
 
-        // Create a new div for the diagram
-        const div = document.createElement("div")
-        div.className = "mermaid w-full p-4"
-        div.textContent = mermaidCode
-        diagramRef.current.appendChild(div)
+        if (!mermaidCode.trim()) {
+          diagramRef.current.innerHTML = ""
+          setError(null)
+          return
+        }
 
-        // Render the diagram
-        await mermaid.run()
+        const svg = await renderMermaid(mermaidCode, diagramTheme)
+        if (renderToken.current !== currentToken || !diagramRef.current) return
+
+        diagramRef.current.innerHTML = svg
+        const svgElement = diagramRef.current.querySelector("svg")
+        if (svgElement) {
+          svgElement.classList.add("beautiful-mermaid")
+          svgElement.setAttribute("role", "img")
+        }
         setError(null)
       } catch (err) {
-        console.error("Mermaid rendering error:", err)
+        console.error("Beautiful Mermaid rendering error:", err)
+        if (diagramRef.current) {
+          diagramRef.current.innerHTML = ""
+        }
         setError("Error rendering diagram. Please check your syntax.")
-        track('editor_error')
+        track("editor_error")
       }
     }
 
