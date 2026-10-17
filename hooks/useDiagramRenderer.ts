@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from "react"
 import mermaid from "mermaid"
+import { render as renderPele } from "pele"
 import { track } from "@vercel/analytics"
 
-export const useDiagramRenderer = (mermaidCode: string) => {
+export type RendererEngine = "mermaid" | "pele"
+
+export const useDiagramRenderer = (mermaidCode: string, engine: RendererEngine = "mermaid") => {
   const [error, setError] = useState<string | null>(null)
+  const [renderTime, setRenderTime] = useState<number | null>(null)
   const diagramRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -11,6 +15,15 @@ export const useDiagramRenderer = (mermaidCode: string) => {
       if (!diagramRef.current) return
 
       try {
+        const start = performance.now()
+        if (engine === "pele") {
+          const { svg } = renderPele(mermaidCode, { responsive: false, autoDirection: false })
+          diagramRef.current.innerHTML = svg
+          setRenderTime(performance.now() - start)
+          setError(null)
+          return
+        }
+
         // Clear previous content
         diagramRef.current.innerHTML = ""
 
@@ -22,10 +35,11 @@ export const useDiagramRenderer = (mermaidCode: string) => {
 
         // Render the diagram
         await mermaid.run()
+        setRenderTime(performance.now() - start)
         setError(null)
       } catch (err) {
         console.error("Mermaid rendering error:", err)
-        setError("Error rendering diagram. Please check your syntax.")
+        setError(err instanceof Error ? err.message : "Error rendering diagram. Please check your syntax.")
         track('editor_error')
       }
     }
@@ -33,10 +47,10 @@ export const useDiagramRenderer = (mermaidCode: string) => {
     // Debounce rendering to avoid excessive updates
     const timer = setTimeout(() => {
       renderDiagram()
-    }, 300)
+    }, engine === "pele" ? 50 : 300)
 
     return () => clearTimeout(timer)
-  }, [mermaidCode])
+  }, [mermaidCode, engine])
 
-  return { diagramRef, error }
+  return { diagramRef, error, renderTime }
 } 
