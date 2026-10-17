@@ -17,7 +17,7 @@ export const useDiagramRenderer = (mermaidCode: string, engine: RendererEngine =
       try {
         const start = performance.now()
         if (engine === "pele") {
-          const { svg } = renderPele(mermaidCode, { responsive: false, autoDirection: false })
+          const { svg } = renderPele(mermaidCode)
           diagramRef.current.innerHTML = svg
           setRenderTime(performance.now() - start)
           setError(null)
