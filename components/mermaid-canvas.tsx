@@ -4,7 +4,7 @@ import { useRef, useState, useMemo, useEffect } from "react"
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
 import { DiagramControls } from "./DiagramControls"
 import { DiagramEditor } from "./DiagramEditor"
-import { useDiagramRenderer } from "@/hooks/useDiagramRenderer"
+import { useDiagramRenderer, type RendererEngine } from "@/hooks/useDiagramRenderer"
 import { useDiagramExport } from "@/hooks/useDiagramExport"
 import { FLOWCHART, GANTT_CHART, USER_JOURNEY } from "@/lib/mermaid-examples"
 import { initializeMermaid } from "@/lib/mermaid-config"
@@ -18,9 +18,10 @@ export default function MermaidCanvas() {
     return diagramExamples[Math.floor(Math.random() * diagramExamples.length)]
   }, [])
   const [mermaidCode, setMermaidCode] = useState(randomDiagram)
+  const [engine, setEngine] = useState<RendererEngine>("mermaid")
   const transformRef = useRef<any>(null)
   
-  const { diagramRef, error } = useDiagramRenderer(mermaidCode)
+  const { diagramRef, error, renderTime } = useDiagramRenderer(mermaidCode, engine)
   const { exportSVG } = useDiagramExport(diagramRef)
 
   // Reset zoom when diagram code changes
@@ -57,6 +58,15 @@ export default function MermaidCanvas() {
         </TransformComponent>
       </TransformWrapper>
 
+      {/* Experimental renderer selector and render timing */}
+      <div className="absolute top-4 left-4 z-50 flex items-center gap-2 rounded-lg border bg-background/95 p-2 shadow-sm">
+        <label htmlFor="renderer-engine" className="text-xs font-medium">Renderer</label>
+        <select id="renderer-engine" aria-label="Diagram renderer" className="rounded border bg-background px-2 py-1 text-sm" value={engine} onChange={(event) => setEngine(event.target.value as RendererEngine)}>
+          <option value="mermaid">Mermaid.js</option>
+          <option value="pele">Pele (experimental)</option>
+        </select>
+        <span className="text-xs tabular-nums text-muted-foreground" aria-live="polite">{renderTime === null ? "—" : `${renderTime.toFixed(1)} ms`}</span>
+      </div>
       {/* Controls overlay */}
       <div className="absolute inset-4 pointer-events-none">
         <DiagramControls transformRef={transformRef} onExport={exportSVG} />
