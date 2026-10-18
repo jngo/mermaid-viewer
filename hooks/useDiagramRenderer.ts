@@ -1,42 +1,59 @@
 import { useEffect, useRef, useState } from "react"
-import mermaid from "mermaid"
+import { render as renderPele, forgetTextWidths } from "pele"
 import { track } from "@vercel/analytics"
 
 export const useDiagramRenderer = (mermaidCode: string) => {
   const [error, setError] = useState<string | null>(null)
+  const [renderTime, setRenderTime] = useState<number | null>(null)
   const diagramRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const renderDiagram = async () => {
+    let cancelled = false
+    let frame = 0
+    const renderDiagram = () => {
       if (!diagramRef.current) return
 
       try {
-        // Clear previous content
-        diagramRef.current.innerHTML = ""
-
-        // Create a new div for the diagram
-        const div = document.createElement("div")
-        div.className = "mermaid w-full p-4"
-        div.textContent = mermaidCode
-        diagramRef.current.appendChild(div)
-
-        // Render the diagram
-        await mermaid.run()
+        const start = performance.now()
+        const style = getComputedStyle(diagramRef.current)
+        const { svg } = renderPele(mermaidCode, {
+          fontFamily: style.fontFamily,
+          fontFamilyMono: style.getPropertyValue("--font-mono").trim() || "monospace",
+          fontSize: parseFloat(style.fontSize) || 16,
+        })
+        diagramRef.current.innerHTML = svg
+        setRenderTime(performance.now() - start)
         setError(null)
       } catch (err) {
         console.error("Mermaid rendering error:", err)
-        setError("Error rendering diagram. Please check your syntax.")
+        setError(err instanceof Error ? err.message : "Error rendering diagram. Please check your syntax.")
         track('editor_error')
       }
     }
 
-    // Debounce rendering to avoid excessive updates
-    const timer = setTimeout(() => {
-      renderDiagram()
-    }, 300)
+    const scheduleRender = () => {
+      if (cancelled) return
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(renderDiagram)
+    }
 
-    return () => clearTimeout(timer)
+    const refreshFontMetrics = () => {
+      if (cancelled) return
+      // Discard measurements made with fallback fonts before Typekit was ready.
+      forgetTextWidths()
+      scheduleRender()
+    }
+
+    scheduleRender()
+    document.fonts.ready.then(refreshFontMetrics)
+    document.fonts.addEventListener("loadingdone", refreshFontMetrics)
+
+    return () => {
+      cancelled = true
+      cancelAnimationFrame(frame)
+      document.fonts.removeEventListener("loadingdone", refreshFontMetrics)
+    }
   }, [mermaidCode])
 
-  return { diagramRef, error }
-} 
+  return { diagramRef, error, renderTime }
+}

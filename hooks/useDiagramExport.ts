@@ -8,7 +8,15 @@ export const useDiagramExport = (diagramRef: RefObject<HTMLDivElement | null>) =
     const svgElement = diagramRef.current.querySelector("svg")
     if (!svgElement) return
 
-    const svgData = new XMLSerializer().serializeToString(svgElement)
+    // SVG files do not inherit the app stylesheet. Freeze the current theme on a clone.
+    const exportedSVG = svgElement.cloneNode(true) as SVGSVGElement
+    const style = getComputedStyle(svgElement)
+    for (const property of Array.from(style)) {
+      if (property.startsWith("--pele-")) {
+        exportedSVG.style.setProperty(property, style.getPropertyValue(property))
+      }
+    }
+    const svgData = new XMLSerializer().serializeToString(exportedSVG)
     const blob = new Blob([svgData], { type: "image/svg+xml" })
     const url = URL.createObjectURL(blob)
 
