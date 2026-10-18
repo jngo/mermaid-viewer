@@ -60,7 +60,7 @@ test('cancels scheduled rendering on unmount', () => {
   assert.equal(h.container.innerHTML, '<svg>previous</svg>')
 })
 
-test('recovers from invalid input and records successful render timing', () => {
+test('recovers from invalid input', () => {
   const h = harness()
   h.edit('invalid'); h.flush()
   assert.equal(h.edit('fixed').error, 'syntax')
@@ -68,7 +68,6 @@ test('recovers from invalid input and records successful render timing', () => {
   assert.equal(h.container.innerHTML, '<svg>fixed</svg>')
   const result = h.edit('next')
   assert.equal(result.error, null)
-  assert.equal(typeof result.renderTime, 'number')
 })
 
 test('exports resolved Pele tokens without changing the on-screen SVG', () => {

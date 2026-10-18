@@ -16,7 +16,7 @@ export default function MermaidCanvas() {
   const [mermaidCode, setMermaidCode] = useState(randomDiagram)
   const transformRef = useRef<any>(null)
   
-  const { diagramRef, error, renderTime } = useDiagramRenderer(mermaidCode)
+  const { diagramRef, error } = useDiagramRenderer(mermaidCode)
   const { exportSVG } = useDiagramExport(diagramRef)
 
   return (
@@ -41,9 +41,6 @@ export default function MermaidCanvas() {
         </TransformComponent>
       </TransformWrapper>
 
-      <div className="absolute top-4 right-4 rounded-lg border bg-background/95 px-3 py-2 text-xs text-muted-foreground shadow-sm">
-        <span aria-live="polite">{renderTime === null ? "—" : `${renderTime.toFixed(1)} ms`}</span>
-      </div>
       {/* Controls overlay */}
       <div className="absolute inset-4 pointer-events-none">
         <DiagramControls transformRef={transformRef} onExport={exportSVG} />
