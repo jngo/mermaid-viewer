@@ -16,14 +16,6 @@ export const useDiagramExport = (diagramRef: RefObject<HTMLDivElement | null>) =
         exportedSVG.style.setProperty(property, style.getPropertyValue(property))
       }
     }
-    const sourceElements = svgElement.querySelectorAll("*")
-    const clonedElements = exportedSVG.querySelectorAll("*")
-    sourceElements.forEach((element, index) => {
-      const fillOpacity = getComputedStyle(element).fillOpacity
-      if (fillOpacity !== "1") {
-        clonedElements[index].setAttribute("fill-opacity", fillOpacity)
-      }
-    })
     const svgData = new XMLSerializer().serializeToString(exportedSVG)
     const blob = new Blob([svgData], { type: "image/svg+xml" })
     const url = URL.createObjectURL(blob)

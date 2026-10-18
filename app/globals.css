@@ -221,9 +221,3 @@
   --pele-series-7: color-mix(in oklch, var(--pele-series-2), var(--pele-series-4));
   --pele-series-8: color-mix(in oklch, var(--pele-series-3), var(--pele-series-5));
 }
-
-/* Let the canvas show through section bands without fading tasks or labels. */
-.pele-journey .pele-section > rect,
-.pele-gantt .pele-sections > .pele-section:nth-child(odd) {
-  fill-opacity: 0.3;
-}

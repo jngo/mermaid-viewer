@@ -71,17 +71,16 @@ test('recovers from invalid input and records successful render timing', () => {
   assert.equal(typeof result.renderTime, 'number')
 })
 
-test('exports resolved Pele tokens and translucent fills without changing the on-screen SVG', () => {
+test('exports resolved Pele tokens without changing the on-screen SVG', () => {
   const exportedProperties = {}, liveProperties = {}
-  const sourceBand = {}, exportedBand = {}
-  const clone = { querySelectorAll: () => [{ setAttribute: (key, value) => { exportedBand[key] = value } }], style: { setProperty: (key, value) => { exportedProperties[key] = value } } }
-  const original = { querySelectorAll: () => [sourceBand], style: liveProperties, cloneNode: () => clone }
+  const clone = { style: { setProperty: (key, value) => { exportedProperties[key] = value } } }
+  const original = { style: liveProperties, cloneNode: () => clone }
   const properties = { '--pele-bg': 'oklch(0.9798 0.0045 78.2983)', '--pele-font': 'inconsolata, monospace', '--unrelated': 'unused' }
   const exports = {}
   let serialized
   vm.runInNewContext(ts.transpileModule(readFileSync('hooks/useDiagramExport.ts', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText, {
     exports, require: () => ({ track() {} }),
-    getComputedStyle: element => element === sourceBand ? { fillOpacity: "0.3" } : Object.assign(Object.keys(properties), { getPropertyValue: key => properties[key] }),
+    getComputedStyle: () => Object.assign(Object.keys(properties), { getPropertyValue: key => properties[key] }),
     XMLSerializer: class { serializeToString(value) { serialized = value; return '<svg/>' } },
     Blob, URL: { createObjectURL: () => 'blob:test', revokeObjectURL() {} },
     document: { createElement: () => ({ click() {} }), body: { appendChild() {}, removeChild() {} } },
@@ -90,7 +89,6 @@ test('exports resolved Pele tokens and translucent fills without changing the on
   assert.equal(serialized, clone)
   assert.deepEqual(exportedProperties, { '--pele-bg': properties['--pele-bg'], '--pele-font': properties['--pele-font'] })
   assert.deepEqual(liveProperties, {})
-  assert.deepEqual(exportedBand, { "fill-opacity": "0.3" })
 })
 
 
