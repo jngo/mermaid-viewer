@@ -4,7 +4,6 @@ import { track } from "@vercel/analytics"
 
 export const useDiagramRenderer = (mermaidCode: string) => {
   const [error, setError] = useState<string | null>(null)
-  const [renderTime, setRenderTime] = useState<number | null>(null)
   const diagramRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -14,7 +13,6 @@ export const useDiagramRenderer = (mermaidCode: string) => {
       if (!diagramRef.current) return
 
       try {
-        const start = performance.now()
         const style = getComputedStyle(diagramRef.current)
         const { svg } = renderPele(mermaidCode, {
           fontFamily: style.fontFamily,
@@ -22,7 +20,6 @@ export const useDiagramRenderer = (mermaidCode: string) => {
           fontSize: parseFloat(style.fontSize) || 16,
         })
         diagramRef.current.innerHTML = svg
-        setRenderTime(performance.now() - start)
         setError(null)
       } catch (err) {
         console.error("Mermaid rendering error:", err)
@@ -55,5 +52,5 @@ export const useDiagramRenderer = (mermaidCode: string) => {
     }
   }, [mermaidCode])
 
-  return { diagramRef, error, renderTime }
+  return { diagramRef, error }
 }
