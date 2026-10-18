@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState, useMemo, useEffect } from "react"
+import { useRef, useState, useMemo } from "react"
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
 import { DiagramControls } from "./DiagramControls"
 import { DiagramEditor } from "./DiagramEditor"
@@ -23,18 +23,6 @@ export default function MermaidCanvas() {
   
   const { diagramRef, error, renderTime } = useDiagramRenderer(mermaidCode, engine)
   const { exportSVG } = useDiagramExport(diagramRef)
-
-  // Reset zoom when diagram code changes
-  useEffect(() => {
-    // Remove/hide the existing diagram
-    if (diagramRef.current) {
-      diagramRef.current.innerHTML = "";
-    }
-    // Reset zoom and pan state
-    if (transformRef.current?.resetTransform) {
-      transformRef.current.resetTransform();
-    }
-  }, [mermaidCode])
 
   return (
     <div className="fixed inset-0 w-screen h-dvh overflow-hidden">

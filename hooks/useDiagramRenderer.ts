@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useId, useRef, useState } from "react"
 import mermaid from "mermaid"
 import { render as renderPele } from "pele"
 import { track } from "@vercel/analytics"
@@ -10,47 +10,44 @@ export const useDiagramRenderer = (mermaidCode: string, engine: RendererEngine =
   const [renderTime, setRenderTime] = useState<number | null>(null)
   const diagramRef = useRef<HTMLDivElement>(null)
 
+  const renderId = useId().replace(/:/g, "")
+  const generation = useRef(0)
+
   useEffect(() => {
+    const currentGeneration = ++generation.current
+    let cancelled = false
+    const isCurrent = () => !cancelled && generation.current === currentGeneration
     const renderDiagram = async () => {
       if (!diagramRef.current) return
 
       try {
         const start = performance.now()
-        if (engine === "pele") {
-          const { svg } = renderPele(mermaidCode)
-          diagramRef.current.innerHTML = svg
-          setRenderTime(performance.now() - start)
-          setError(null)
-          return
-        }
+        const result = engine === "pele"
+          ? renderPele(mermaidCode)
+          : await mermaid.render(`diagram-${renderId}-${currentGeneration}`, mermaidCode)
 
-        // Clear previous content
-        diagramRef.current.innerHTML = ""
-
-        // Create a new div for the diagram
-        const div = document.createElement("div")
-        div.className = "mermaid w-full p-4"
-        div.textContent = mermaidCode
-        diagramRef.current.appendChild(div)
-
-        // Render the diagram
-        await mermaid.run()
+        if (!isCurrent() || !diagramRef.current) return
+        diagramRef.current.innerHTML = result.svg
+        if ("bindFunctions" in result) result.bindFunctions?.(diagramRef.current)
         setRenderTime(performance.now() - start)
         setError(null)
       } catch (err) {
+        if (!isCurrent()) return
         console.error("Mermaid rendering error:", err)
         setError(err instanceof Error ? err.message : "Error rendering diagram. Please check your syntax.")
         track('editor_error')
       }
     }
 
-    // Debounce rendering to avoid excessive updates
-    const timer = setTimeout(() => {
-      renderDiagram()
-    }, engine === "pele" ? 50 : 300)
+    const frame = engine === "pele" ? requestAnimationFrame(() => { void renderDiagram() }) : null
+    const timer = engine === "mermaid" ? setTimeout(() => { void renderDiagram() }, 300) : null
 
-    return () => clearTimeout(timer)
-  }, [mermaidCode, engine])
+    return () => {
+      cancelled = true
+      if (frame !== null) cancelAnimationFrame(frame)
+      if (timer !== null) clearTimeout(timer)
+    }
+  }, [mermaidCode, engine, renderId])
 
   return { diagramRef, error, renderTime }
-} 
+}
