@@ -36,7 +36,7 @@ export default function MermaidCanvas() {
         >
           <div
             ref={diagramRef}
-            className="w-screen h-screen flex items-center justify-center min-h-screen min-w-screen text-base [&_.mermaid_svg]:overflow-visible! [&_.mermaid_svg_text]:font-sans! [&_.mermaid_svg_text]:text-base! [&_.mermaid_svg_text]:fill-current! [&_.mermaid_svg_text]:!dominant-baseline-middle [&_.mermaid_svg_text]:!text-anchor-middle [&_.mermaid_svg_foreignObject]:overflow-visible! [&_.mermaid_svg_foreignObject_div]:text-base! [&_.mermaid_svg_foreignObject_div]:font-sans! [&_.mermaid_svg_foreignObject_div]:whitespace-normal! [&_.mermaid_svg_foreignObject_div]:break-words!"
+            className="diagram-canvas w-screen h-screen flex items-center justify-center min-h-screen min-w-screen text-base font-sans"
           />
         </TransformComponent>
       </TransformWrapper>

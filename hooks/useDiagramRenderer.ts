@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { render as renderPele } from "pele"
+import { render as renderPele, forgetTextWidths } from "pele"
 import { track } from "@vercel/analytics"
 
 export const useDiagramRenderer = (mermaidCode: string) => {
@@ -9,12 +9,18 @@ export const useDiagramRenderer = (mermaidCode: string) => {
 
   useEffect(() => {
     let cancelled = false
+    let frame = 0
     const renderDiagram = () => {
       if (!diagramRef.current) return
 
       try {
         const start = performance.now()
-        const { svg } = renderPele(mermaidCode)
+        const style = getComputedStyle(diagramRef.current)
+        const { svg } = renderPele(mermaidCode, {
+          fontFamily: style.fontFamily,
+          fontFamilyMono: style.getPropertyValue("--font-mono").trim() || "monospace",
+          fontSize: parseFloat(style.fontSize) || 16,
+        })
         diagramRef.current.innerHTML = svg
         setRenderTime(performance.now() - start)
         setError(null)
@@ -25,13 +31,27 @@ export const useDiagramRenderer = (mermaidCode: string) => {
       }
     }
 
-    const frame = requestAnimationFrame(() => {
-      if (!cancelled) renderDiagram()
-    })
+    const scheduleRender = () => {
+      if (cancelled) return
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(renderDiagram)
+    }
+
+    const refreshFontMetrics = () => {
+      if (cancelled) return
+      // Discard measurements made with fallback fonts before Typekit was ready.
+      forgetTextWidths()
+      scheduleRender()
+    }
+
+    scheduleRender()
+    document.fonts.ready.then(refreshFontMetrics)
+    document.fonts.addEventListener("loadingdone", refreshFontMetrics)
 
     return () => {
       cancelled = true
       cancelAnimationFrame(frame)
+      document.fonts.removeEventListener("loadingdone", refreshFontMetrics)
     }
   }, [mermaidCode])
 

@@ -192,3 +192,32 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Keep diagrams tied to the same tokens as the editor and controls. */
+.diagram-canvas .pele {
+  --pele-bg: var(--background);
+  --pele-fg: var(--foreground);
+  --pele-muted: var(--muted-foreground);
+  --pele-line: var(--muted-foreground);
+  --pele-surface: var(--card);
+  --pele-surface-alt: var(--secondary);
+  --pele-border: var(--muted-foreground);
+  --pele-accent: var(--chart-1);
+  --pele-critical: var(--destructive);
+  --pele-error: var(--destructive);
+  --pele-font: var(--font-sans);
+  --pele-font-mono: var(--font-mono);
+  --pele-title-weight: 600;
+  --pele-heading-weight: 600;
+  --pele-bold-weight: 700;
+  --pele-radius: calc(var(--radius) - 2px);
+  /* A little foreground ink keeps category labels legible in both palettes. */
+  --pele-series-1: color-mix(in oklch, var(--chart-1) 85%, var(--foreground));
+  --pele-series-2: color-mix(in oklch, var(--chart-2) 85%, var(--foreground));
+  --pele-series-3: color-mix(in oklch, var(--chart-3) 85%, var(--foreground));
+  --pele-series-4: color-mix(in oklch, var(--chart-4) 85%, var(--foreground));
+  --pele-series-5: color-mix(in oklch, var(--chart-5) 85%, var(--foreground));
+  --pele-series-6: color-mix(in oklch, var(--pele-series-1), var(--pele-series-3));
+  --pele-series-7: color-mix(in oklch, var(--pele-series-2), var(--pele-series-4));
+  --pele-series-8: color-mix(in oklch, var(--pele-series-3), var(--pele-series-5));
+}
