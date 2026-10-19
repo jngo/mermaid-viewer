@@ -129,7 +129,7 @@ export function DiagramEditor({ mermaidCode, onCodeChange, error }: DiagramEdito
       <TabsContent value="about" className="w-full grow text-muted-foreground text-sm space-y-2">
         <p><strong>Mermaid Viewer</strong> was born out of the need for a simple, mobile-friendly viewer for the mountains of Mermaid diagrams coming out of my ChatGPT sessions.</p>
         <p>As a tool for creating diagrams and visualisations using plain text, <a href="https://mermaid.js.org/" className="underline">Mermaid</a> is ideally suited for transforming the outputs of generative AI into structured formats.</p>
-        <p>Created by <a href="https://smallepic.com/" className="underline">John Ngo</a> with <em>a lot</em> of help from <a href="https://v0.dev/" className="underline">v0</a> and <a href="https://cursor.com/" className="underline">Cursor</a>.</p>
+        <p>Created by <a href="https://smallepic.com/" className="underline">John Ngo</a> with <em>a lot</em> of help from <a href="https://v0.dev/" className="underline">v0</a> and <a href="https://cursor.com/" className="underline">Cursor</a>. Diagrams are rendered with <a href="https://pele.run/" className="underline">Pele</a>, a beautifully designed library by <a href="https://stephango.com/" className="underline">Kepano</a>.</p>
         <p>Mermaid Viewer is open source and available on <a href="https://github.com/smallepic/mermaid-viewer" className="underline">GitHub</a>.</p>
       </TabsContent>
     </Tabs>
